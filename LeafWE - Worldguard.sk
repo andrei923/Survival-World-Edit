@@ -1,0 +1,176 @@
+import:
+    java.util.UUID
+	fr.mrmicky.fastparticle.FastParticle
+	fr.mrmicky.fastparticle.ParticleType	
+    com.wasteofplastic.askyblock.ASkyBlockAPI	
+
+options:
+
+	#do not touch this -_-
+	plugin-version: 0.1.2
+	
+	
+#
+# ● SETTINGS ●
+#	
+
+	wand-item: wooden axe
+	
+	#you can also use seconds "example, block-place-speed: 2 seconds"
+	block-place-speed: 2 ticks
+	
+	#Block from bellow will not be broken.
+	block-break-blacklist: sign or chest or bedrock or mob spawner	
+	
+	#When this is false, the player needs to wait until the current job is done to start another.
+	multiple-jobs: false
+		
+# ● MESSAGES ●
+	
+	
+	prefix: &6&lWORLD EDIT &8&l» &7	
+	
+	position-set: &ePosition &3%{_pos}% &ehas been set.
+	
+	position-not-set: &ePosition &3%{_pos}% &eis not set.	
+	
+	out-of-blocks: &eOut of blocks.
+	
+	cannot-use-this-item: &eYou cannot use this item.
+	
+	started-job: &eStarted to placing blocks...
+	
+	already-started: &ePlease wait until the current job is done.
+	
+	finished-job: &eDone.
+	
+	block-blacklisted: &cThis block is blacklisted.
+	
+	no-permission: &cYou don't have permission to execute this command!
+	
+#By EWS#5810
+#https://forums.skunity.com/members/ews.60/
+plural expression blocks from %location% (to|and) %location%:
+	loop of: block
+	return type: blocks
+	get:
+		set {_1} to expr-1
+		set {_2} to expr-2
+		set {_x} to 1
+		set {_y} to 1
+		set {_z} to 1
+		if x coord of {_1} > x coord of {_2}:
+			set {_x} to -1
+		if y coord of {_1} > y coord of {_2}:
+			set {_y} to -1
+		if z coord of {_1} > z coord of {_2}:
+			set {_z} to -1
+		set {_base1} to {_1}
+		loop abs(x coord of {_1} - x coord of {_2}) + 1 times:
+			loop abs(z coord of {_1} - z coord of {_2}) + 1 times:
+				loop abs(y coord of {_1} - y coord of {_2}) + 1 times:
+					add 1 to {_next}
+					set {_b::%{_next}%} to block at {_1}
+					add {_y} to y coord of {_1}
+				add {_z} to z coord of {_1}
+				set y coord of {_1} to y coord of {_base1}
+			add {_x} to x coord of {_1}
+			set z coord of {_1} to z coord of {_base1}
+		return {_b::*}
+	set:
+		loop blocks from expr-1 and expr-2:
+			set block at loop-value to change value
+
+
+function leaf_we_set_pos(p: player, loc: location, pos: text):
+	set {_uuid} to uuid of {_p} 
+	set {LEAF-WE::%{_uuid}%.POS-%{_pos}%} to {_loc}
+	send "{@prefix}{@position-set}" to {_p}
+
+on left-click with {@wand-item}:
+	cancel event
+	target block is not air
+	distance between player and target block is smaller than 5
+	leaf_we_set_pos(player, location of target block, "1")	
+	
+on right-click with {@wand-item}:
+	cancel event
+	target block is not air
+	distance between player and target block is smaller than 5
+	leaf_we_set_pos(player, location of target block, "2")
+
+function leaf_we_allow(p: text, loc: location) :: boolean:
+	if {_p} is member of region at block at {_loc}:
+		return true
+	return false	
+					
+command set [<material>]:
+	trigger:
+		if player has permission "leafwe.set":
+			if {LEAF-WE::%uuid of player%::POS-1} is set:
+				if {LEAF-WE::%uuid of player%::POS-2} is set:
+					if arg-1 is not set:
+						set {_block} to player's tool
+					if arg-1 is set:				
+						set {_block} to arg-1
+					if {_block} is solid:	
+						if {@multiple-jobs} is false:
+							{LEAF-WE::%uuid of player%::RUNNING} is set
+							send "{@prefix}{@already-started}"	
+							stop
+						set {LEAF-WE::%uuid of player%::RUNNING} to true	
+						send "{@prefix}{@started-job}"	
+						set {_w} to world of {LEAF-WE::%uuid of player%::POS-1}
+						loop blocks from {LEAF-WE::%uuid of player%::POS-1} and {LEAF-WE::%uuid of player%::POS-2}:
+							if player is online:
+								if number of {_block} in player's inventory is > 0:
+									leaf_we_allow(player, location of loop-block) is true
+									set {_loc} to location of loop-block		
+									if block at {_loc} != air or {@block-break-blacklist}:
+										set {_b-give} to block at {_loc}
+										{_b-give} != any leaves
+										give {_b-give} to player
+									if block at {_loc} != {@block-break-blacklist}:	
+										set block at {_loc} to {_block}
+									FastParticle.spawnParticle({_w}, ParticleType.FLAME, {_loc} and 1)
+									remove 1 of {_block} from player's inventory
+									wait {@block-place-speed}
+								else:
+									delete {LEAF-WE::%uuid of player%::RUNNING}
+									send "{@prefix}{@out-of-blocks}"
+									stop
+							else:
+								stop	
+						delete {LEAF-WE::%uuid of player%::RUNNING}		
+						send "{@prefix}{@finished-job}"	
+					else:
+						send "{@prefix}{@cannot-use-this-item}"
+				else:
+					set {_pos} to 2
+					send "{@prefix}{@position-not-set}"					
+			else:
+				set {_pos} to 1
+				send "{@prefix}{@position-not-set}"	
+		else:
+			send "{@prefix}{@no-permission}"
+				
+on quit:
+	delete {LEAF-WE::%uuid of player%::*}
+	
+on load:
+	send "&8|--------------------------------------------&8|" to console
+	send " " to console
+	send "{@prefix}&3&lLoading &ev.{@plugin-version}&3..." to console
+	send "{@prefix}&3&lPlugin loaded!" to console
+	send " " to console
+	send "&8|--------------------------------------------&8|" to console
+	delete {LEAF-WE::*}
+
+on unload:
+	send "&8|--------------------------------------------&8|" to console
+	send " " to console
+	send "{@prefix}&3&lDisabling &ev.{@plugin-version}&3&l..." to console
+	send "{@prefix}&3&lv.{@plugin-version} disabled!" to console
+	send " " to console
+	send "&8|--------------------------------------------&8|" to console	
+	
