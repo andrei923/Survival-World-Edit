@@ -44,8 +44,6 @@ options:
 	
 	finished-job: &eDone.
 	
-	block-blacklisted: &cThis block is blacklisted.
-	
 	no-permission: &cYou don't have permission to execute this command!
 	
 #By EWS#5810
