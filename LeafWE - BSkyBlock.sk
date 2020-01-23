@@ -55,19 +55,10 @@ on right click:
 		distance between player and target block < 5
 		leaf_we_set_pos(player, location of target block, "2")
 
-function leaf_we_allow(p: text, loc: location) :: boolean:
-	set {_uuid} to uuid of {_p}
-	if ASkyBlockAPI.getInstance().getIslandOwnedBy(UUID.fromString({_uuid})).onIsland({_loc}):
-		return true
-	else:	
-		set {_stuff::*} to ASkyBlockAPI.getInstance().getTeamMembers(UUID.fromString({_uuid}))
-		size of {_stuff::*} > 1:
-			loop {_stuff::*}:		
-				if ASkyBlockAPI.getInstance().getIslandOwnedBy(UUID.fromString(uuid of loop-value)).onIsland({_loc}):	
-					return true	
-			return false	
-		else:
-			return false
+function leaf_we_allow(p: player, loc: location) :: boolean:
+	set {_island} to BentoBox.getInstance().getIslands().getIslandAt({_loc})
+	set {_boolean} to {_island}.get().getMembers().containsKey({_p}.getUniqueId())
+	return {_boolean}
 
 function leafwe_check_block(loc: location) :: boolean:
 	loop {-LEAF-WE::BlocksBlackList::*}:
