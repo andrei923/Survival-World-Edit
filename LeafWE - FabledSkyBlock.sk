@@ -3,9 +3,11 @@ import:
 	org.bukkit.Bukkit
 	java.util.Optional	
 	ch.njol.skript.Skript	
-	world.bentobox.bentobox.BentoBox
 	fr.mrmicky.fastparticle.FastParticle
-	fr.mrmicky.fastparticle.ParticleType		
+	fr.mrmicky.fastparticle.ParticleType
+	com.songoda.skyblock.api.SkyBlockAPI
+	com.songoda.skyblock.api.island.Island
+	com.songoda.skyblock.api.island.IslandManager				
 
 options:
 	plugin-version: 1.0.0
@@ -55,8 +57,9 @@ on right click:
 		distance between player and target block < 5
 		leaf_we_set_pos(player, location of target block, "2")
 
-function leaf_we_allow(p: text, loc: location) :: boolean:
-	if {_p} is member of region at block at {_loc}:
+function leaf_we_allow(p: player, loc: location) :: boolean:
+	set {_manager} to SkyBlockAPI.getIslandManager()
+	if {_manager}.getIsland({_p}) = {_manager}.getIslandAtLocation({_loc}):
 		return true
 	return false
 

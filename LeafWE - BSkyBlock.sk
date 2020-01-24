@@ -38,7 +38,7 @@ local expression replacer %texts% with %texts% in %text%:
 
 function leaf_we_set_pos(p: player, loc: location, pos: text):
 	set {_uuid} to uuid of {_p} 
-	set {-LEAF-WE::%{_uuid}%::POS-%{_pos}%} to {_loc}
+	set {-LEAF-WE::PlayerData::%{_uuid}%::POS-%{_pos}%} to {_loc}
 	send replacer "{pos}" with "%{_pos}%" in yaml value "Messages.Position Set" from "leafwe.config" to {_p}
 
 on left click:
@@ -71,11 +71,6 @@ function deleteMinion(p: player, loc: location):
 		if metadata value "MINION_BUILDER" of loop-entity = "%{_p}%":
 			clear loop-entity
 
-command kil:
-	trigger:
-		loop all entities:
-			clear loop-entity
-
 function createMinion(p: player, loc: location, block: material) :: entity:
 	spawn an armor stand at {_loc}
 	set {_stand} to spawned armor stand	
@@ -106,23 +101,23 @@ command CreateWorldEditTool:
 command set [<material>]:
 	trigger:
 		if player has permission yaml value "Settings.Permission" from "leafwe.config":
-			if {-LEAF-WE::%uuid of player%::POS-1} is set:
-				if {-LEAF-WE::%uuid of player%::POS-2} is set:
+			if {-LEAF-WE::PlayerData::%uuid of player%::POS-1} is set:
+				if {-LEAF-WE::PlayerData::%uuid of player%::POS-2} is set:
 					if arg-1 is not set:
 						set {_block} to player's tool
 					if arg-1 is set:				
 						set {_block} to arg-1
 					if {_block} is solid:	
 						if yaml value "Settings.Multiple Jobs" from "leafwe.config" is false:
-							{-LEAF-WE::%uuid of player%::RUNNING} is set	
+							{-LEAF-WE::PlayerData::%uuid of player%::RUNNING} is set	
 							send yaml value "Messages.Already Started" from "leafwe.config"
 							stop 
-						set {-LEAF-WE::%uuid of player%::RUNNING} to true	
+						set {-LEAF-WE::PlayerData::%uuid of player%::RUNNING} to true	
 						send yaml value "Messages.Start Job" from "leafwe.config"
-						set {_w} to world of {-LEAF-WE::%uuid of player%::POS-1}
+						set {_w} to world of {-LEAF-WE::PlayerData::%uuid of player%::POS-1}
 						if yaml value "Settings.Minion" from "leafwe.config" is true:						
-							set {_stand} to createMinion(player, location of block above {-LEAF-WE::%uuid of player%::POS-1}, {_block})
-						loop blocks within {-LEAF-WE::%uuid of player%::POS-1} to {-LEAF-WE::%uuid of player%::POS-2}:
+							set {_stand} to createMinion(player, location of block above {-LEAF-WE::PlayerData::%uuid of player%::POS-1}, {_block})
+						loop blocks within {-LEAF-WE::PlayerData::%uuid of player%::POS-1} to {-LEAF-WE::PlayerData::%uuid of player%::POS-2}:
 							if player is online:
 								if number of {_block} in player's inventory > 0:
 									set {_loc} to location of loop-block								
@@ -137,14 +132,14 @@ command set [<material>]:
 										remove 1 of {_block} from player's inventory
 									wait {-LEAF-WE::Speed}
 								else:
-									delete {-LEAF-WE::%uuid of player%::RUNNING}
+									delete {-LEAF-WE::PlayerData::%uuid of player%::RUNNING}
 									deleteMinion(player, location of {_stand})
 									send yaml value "Messages.Out of blocks" from "leafwe.config"
 									stop
 							else:
 								deleteMinion(player, location of {_stand})
 								stop	
-						delete {-LEAF-WE::%uuid of player%::RUNNING}	
+						delete {-LEAF-WE::PlayerData::%uuid of player%::RUNNING}	
 						deleteMinion(player, location of {_stand})
 						send yaml value "Messages.Finish Job" from "leafwe.config"
 					else:
@@ -157,7 +152,7 @@ command set [<material>]:
 			send yaml value "Messages.No Permission" from "leafwe.config"
 				
 on quit:
-	delete {-LEAF-WE::%uuid of player%::*}
+	delete {-LEAF-WE::PlayerData::%uuid of player%::*}
 	
 on load:
 	loop currently loaded yaml files:
