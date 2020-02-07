@@ -32,5 +32,6 @@ on load:
 	loop "ASkyBlock", "BSkyBlock", "FabledSkyBlock" and "WorldGuard":
 		Bukkit.getPluginManager().isPluginEnabled(loop-value-1):
 			write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/hooks/%loop-value-1%.sk" in file "plugins/LeafWorldEdit/scripts/hooks/%loop-value-1%.sk"
+			stop loop
 	wait a second
 	leafwe_asemble()
