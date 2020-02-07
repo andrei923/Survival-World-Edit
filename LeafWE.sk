@@ -26,7 +26,7 @@ on skript load:
 	ScriptLoader.loadScripts(new File("plugins/LeafWorldEdit/scripts/main.sk"))
 
 on load:
-	write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/LeafWE.sk" in file "plugins/LeafWorldEdit/scripts/LeafWE.sk"
+	write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/WorldEdit.sk" in file "plugins/LeafWorldEdit/scripts/WorldEdit.sk"
 	loop "ASkyBlock", "BSkyBlock", "FabledSkyBlock" and "WorldGuard":
 		Bukkit.getPluginManager().isPluginEnabled(loop-value-1):
 			write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/hooks/%loop-value-1%.sk" in file "plugins/LeafWorldEdit/scripts/hooks/%loop-value-1%.sk"
