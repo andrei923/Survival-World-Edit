@@ -14,7 +14,7 @@ effect write from %string% in file %string%:
 		Files.copy({_in}, Paths.get(expr-2) and StandardCopyOption.REPLACE_EXISTING)
 		{_in}.close()
 
-function leafwe_asemble():
+function leafwe_assemble():
 	set {_file} to new File("plugins/LeafWorldEdit/scripts/hooks")
 	loop ...{_file}.listFiles():
 		set {_value} to "%loop-value-1%"
@@ -34,4 +34,4 @@ on load:
 			write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/hooks/%loop-value-1%.sk" in file "plugins/LeafWorldEdit/scripts/hooks/%loop-value-1%.sk"
 			stop loop
 	wait a second
-	leafwe_asemble()
+	leafwe_assemble()
