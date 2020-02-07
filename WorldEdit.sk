@@ -3,7 +3,7 @@ import:
 	fr.mrmicky.fastparticle.ParticleType	
 
 options:
-	plugin-version: 1.1.0
+	plugin-version: 1.2.0
 	
 function leafwe_check_yaml(dir: text, value: text, set: text, type: text = "text"):
 	yaml value {_value} from "leafwe.%{_dir}%" is not set:
