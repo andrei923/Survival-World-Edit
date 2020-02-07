@@ -148,7 +148,7 @@ on load:
 		loop-value contains "leafwe.config"
 		unload yaml loop-value-1	
 	load yaml "plugins/LeafWorldEdit/config.yml" as "leafwe.config"
-	leafwe_check_yaml("config", "Settings.Wand.Item", "wooden axe")		
+	leafwe_check_yaml("config", "Settings.Wand.Item", "blaze rod")		
 	leafwe_check_yaml("config", "Settings.Wand.Name", "&8❐ &eWorld Edit &8❐")	
 	leafwe_check_yaml("config", "Settings.Permission", "leafwe.set")		
 	leafwe_check_yaml("config", "Settings.Speed", "2 ticks")
