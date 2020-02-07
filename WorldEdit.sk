@@ -81,7 +81,9 @@ command CreateWorldEditTool:
 	trigger:
 		if player has permission yaml value "Settings.Permission" from "leafwe.config":
 			if type of player's tool is type of {-LEAF-WE::Wand}:
-				set name of player's tool to name of {-LEAF-WE::Wand}
+				#set name of player's tool to name of {-LEAF-WE::Wand}
+				remove player's tool from player's inventory
+				give {-LEAF-WE::Wand} to player
 			else:
 				send replacer "{item}" with "%type of {-LEAF-WE::Wand}%" in yaml value "Messages.Invalid Item" from "leafwe.config" to player		
 		else:
