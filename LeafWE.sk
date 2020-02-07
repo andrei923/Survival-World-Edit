@@ -14,7 +14,7 @@ effect write from %string% in file %string%:
 		Files.copy({_in}, Paths.get(expr-2) and StandardCopyOption.REPLACE_EXISTING)
 		{_in}.close()
 
-on skript load:
+function leafwe_asemble():
 	set {_file} to new File("plugins/LeafWorldEdit/scripts/hooks")
 	loop ...{_file}.listFiles():
 		set {_value} to "%loop-value-1%"
@@ -23,10 +23,14 @@ on skript load:
 		broadcast "&a%{_value}% Found, using it..."
 		ScriptLoader.loadScripts(new File("%loop-value-1%"))
 	wait a second
-	ScriptLoader.loadScripts(new File("plugins/LeafWorldEdit/scripts/main.sk"))
+	ScriptLoader.loadScripts(new File("plugins/LeafWorldEdit/scripts/WorldEdit.sk"))
 
 on load:
+	load yaml "plugins/LeafWorldEdit/scripts/hooks/dir.create" as "directory"
+	delete yaml "directory"
 	write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/WorldEdit.sk" in file "plugins/LeafWorldEdit/scripts/WorldEdit.sk"
 	loop "ASkyBlock", "BSkyBlock", "FabledSkyBlock" and "WorldGuard":
 		Bukkit.getPluginManager().isPluginEnabled(loop-value-1):
 			write from "https://raw.githubusercontent.com/andrei923/Survival-World-Edit/master/hooks/%loop-value-1%.sk" in file "plugins/LeafWorldEdit/scripts/hooks/%loop-value-1%.sk"
+	wait a second
+	leafwe_asemble()
