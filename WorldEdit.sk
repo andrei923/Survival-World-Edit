@@ -80,7 +80,7 @@ function createMinion(p: player, loc: location, block: material) :: entity:
 command CreateWorldEditTool:
 	trigger:
 		if player has permission yaml value "Settings.Permission" from "leafwe.config":
-			if type of player's tool is type of {-LEAF-WE::Wand}:
+			if "%type of player's tool%" is "%type of {-LEAF-WE::Wand}%":
 				set name of player's tool to yaml value "Settings.Wand.Name" from "leafwe.config"
 			else:
 				send replacer "{item}" with "%type of {-LEAF-WE::Wand}%" in yaml value "Messages.Invalid Item" from "leafwe.config" to player		
