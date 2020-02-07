@@ -1,0 +1,9 @@
+import:
+	org.bukkit.Bukkit
+	world.bentobox.bentobox.BentoBox
+
+condition leafwe %player% can build at %location%:
+	check:
+		set {_island} to BentoBox.getInstance().getIslands().getIslandAt(expr-2)
+		if {_island}.get().getMembers().containsKey(expr-1.getUniqueId()) is true:
+			continue

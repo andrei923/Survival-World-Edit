@@ -1,0 +1,4 @@
+condition leafwe %player% can build at %location%:
+	check:
+		if expr-1 is member of region at block at expr-2:
+			continue

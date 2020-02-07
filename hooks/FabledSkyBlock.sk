@@ -1,0 +1,10 @@
+import:
+	com.songoda.skyblock.api.SkyBlockAPI
+	com.songoda.skyblock.api.island.Island
+	com.songoda.skyblock.api.island.IslandManager				
+
+condition leafwe %player% can build at %location%:
+	check:
+		set {_manager} to SkyBlockAPI.getIslandManager()
+		if {_manager}.getIsland(expr-1) = {_manager}.getIslandAtLocation(expr-2):
+			continue

@@ -1,0 +1,13 @@
+import:
+	com.wasteofplastic.askyblock.ASkyBlockAPI		
+
+condition leafwe %player% can build at %location%:
+	check:
+		if ASkyBlockAPI.getInstance().getIslandOwnedBy(uuid of expr-1).onIsland(expr-2):
+			continue
+		else:	
+			set {_stuff::*} to ASkyBlockAPI.getInstance().getTeamMembers(uuid of expr-1)
+			size of {_stuff::*} > 1
+			loop {_stuff::*}:		
+				if ASkyBlockAPI.getInstance().getIslandOwnedBy(uuid of loop-value-1).onIsland(expr-2):	
+					continue
