@@ -81,9 +81,7 @@ command CreateWorldEditTool:
 	trigger:
 		if player has permission yaml value "Settings.Permission" from "leafwe.config":
 			if type of player's tool is type of {-LEAF-WE::Wand}:
-				#set name of player's tool to name of {-LEAF-WE::Wand}
-				remove player's tool from player's inventory
-				give {-LEAF-WE::Wand} to player
+				set name of player's tool to yaml value "Settings.Wand.Name" from "leafwe.config"
 			else:
 				send replacer "{item}" with "%type of {-LEAF-WE::Wand}%" in yaml value "Messages.Invalid Item" from "leafwe.config" to player		
 		else:
@@ -175,7 +173,7 @@ on load:
 	save yaml "leafwe.config"
 	delete {-LEAF-WE::*}
 	set {-LEAF-WE::Speed} to yaml value "Settings.Speed" from "leafwe.config" parsed as timespan
-	set {-LEAF-WE::Wand} to yaml value "Settings.Wand.Item" from "leafwe.config" parsed as material named yaml value "Settings.Wand.Name" from "leafwe.config"
+	set {-LEAF-WE::Wand} to yaml value "Settings.Wand.Item" from "leafwe.config" parsed as material
 	loop yaml list "Settings.Block Break Blacklist" from "leafwe.config":
 		if "%loop-value-1%" parsed as material is set:
 			add "%loop-value-1%" parsed as material to {-LEAF-WE::BlocksBlackList::*}
