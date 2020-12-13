@@ -2,6 +2,7 @@
 https://andrei923.github.io/Survival-World-Edit
 
 # ➭ Instalation:
+
 ▪ Download Skript and place it in "plugins" folder.
 
 ▪ Download dependencies and place them in "plugins" folder.
@@ -11,6 +12,14 @@ https://andrei923.github.io/Survival-World-Edit
 ▪ Put .sk file in \plugins\Skript\scripts.
 
 ▪ Restart The Server.
+
+# ➭ Dependencies:
+> ▪ Skript ➥ https://github.com/SkriptLang/Skript/releases
+
+> ▪ Skript for 1.8.8 https://github.com/Matocolotoe/Skript-1.8/releases
+***
+> ▪ LeafSK ➥ https://github.com/andrei923/LeafSK/releases
+***
 
 #
 ![GitHub release](https://img.shields.io/github/release/andrei923/Survival-World-Edit.svg?style=for-the-badge)
