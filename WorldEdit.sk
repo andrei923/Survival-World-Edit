@@ -3,7 +3,7 @@ import:
 	fr.mrmicky.fastparticle.ParticleType	
 
 options:
-	plugin-version: 1.2.0
+	plugin-version: 1.3.0
 	
 function leafwe_check_yaml(dir: text, value: text, set: text, type: text = "text"):
 	yaml value {_value} from "leafwe.%{_dir}%" is not set:
@@ -103,7 +103,7 @@ command set [<material>]:
 						set {_w} to world of {-LEAF-WE::PlayerData::%player%::POS-1}
 						if yaml value "Settings.Minion" from "leafwe.config" is true:						
 							set {_stand} to createMinion(player, location of block above {-LEAF-WE::PlayerData::%player%::POS-1}, {_block})
-						loop blocks within {-LEAF-WE::PlayerData::%player%::POS-1} to {-LEAF-WE::PlayerData::%player%::POS-2}:
+						loop blocks within block at {-LEAF-WE::PlayerData::%player%::POS-1} and block at {-LEAF-WE::PlayerData::%player%::POS-2}:
 							if player is online:
 								if number of {_block} in player's inventory > 0:
 									set {_loc} to location of loop-block
